@@ -3,40 +3,37 @@
 import { useState } from "react";
 import Image from "next/image";
 
+const USER_ID = "user_1234"; // 【連携時要入力】ログイン情報と連携
+
 const reflectionItems = {
   goals: [
-    { icon: "/icons/goal1.png", label: "朝すっきり起きられる" },
-    { icon: "/icons/goal2.png", label: "集中できる" },
-    { icon: "/icons/goal3.png", label: "心の余裕をもって過ごす" }
+    { id: "goal1", icon: "/icons/goal1.png", label: "朝すっきり起きられる" },
+    { id: "goal2", icon: "/icons/goal2.png", label: "集中できる" },
+    { id: "goal3", icon: "/icons/goal3.png", label: "心の余裕をもって過ごす" }
   ],
   habits: [
-    { icon: "/icons/habit1.png", label: "夜更かしをやめる" },
-    { icon: "/icons/habit2.png", label: "瞑想を5分する" },
-    { icon: "/icons/habit3.png", label: "水をたくさん飲む" }
+    { id: "habit1", icon: "/icons/habit1.png", label: "夜更かしをやめる" },
+    { id: "habit2", icon: "/icons/habit2.png", label: "瞑想を5分する" },
+    { id: "habit3", icon: "/icons/habit3.png", label: "水をたくさん飲む" }
   ]
 };
 
 export default function ReflectionPage() {
-  const [ratings, setRatings] = useState(Array(6).fill(0));
+  const [ratings, setRatings] = useState({});
   const [comment, setComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleRating = (sectionIndex, starIndex) => {
-    const updated = [...ratings];
-    updated[sectionIndex] = starIndex + 1;
-    setRatings(updated);
+  const handleRating = (id, score) => {
+    setRatings((prev) => ({ ...prev, [id]: score }));
   };
 
-  const renderStars = (sectionIndex) => (
+  const renderStars = (id) => (
     <div className="flex gap-1 mt-1 mb-4">
       {[...Array(5)].map((_, i) => (
-        <button
-          key={i}
-          type="button"
-          onClick={() => handleRating(sectionIndex, i)}
-        >
+        <button key={i} onClick={() => handleRating(id, i + 1)}>
           <span
             className={`text-xl ${
-              ratings[sectionIndex] > i ? "text-[#F5E755]" : "text-[#DFDFDF]"
+              (ratings[id] || 0) > i ? "text-[#F5E755]" : "text-[#DFDFDF]"
             }`}
           >
             ★
@@ -45,6 +42,49 @@ export default function ReflectionPage() {
       ))}
     </div>
   );
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+
+    const payload = {
+      user_id: USER_ID,
+      ratings: {
+        goals: reflectionItems.goals.map((item) => ({
+          id: item.id,
+          score: ratings[item.id] || 0
+        })),
+        habits: reflectionItems.habits.map((item) => ({
+          id: item.id,
+          score: ratings[item.id] || 0
+        }))
+      },
+      comment,
+      date: new Date().toISOString().split("T")[0]
+    };
+
+    try {
+      const res = await fetch("http://localhost:8000/api/reflection", { //【連携時入力】APIのURL確定したら入力
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert("記録を送信しました！");
+        setRatings({});
+        setComment("");
+      } else {
+        alert("送信に失敗しました");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("通信エラーが発生しました");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="max-w-[420px] mx-auto px-4 py-6">
@@ -63,14 +103,13 @@ export default function ReflectionPage() {
         なりたい姿
       </div>
 
-      {/* なりたい姿 各項目 + 星 */}
-      {reflectionItems.goals.map((item, i) => (
-        <div key={i} className="mb-2">
+      {reflectionItems.goals.map((item) => (
+        <div key={item.id} className="mb-2">
           <div className="flex items-center gap-3">
             <Image src={item.icon} alt={item.label} width={40} height={40} />
             <span className="text-sm">{item.label}</span>
           </div>
-          {renderStars(i)}
+          {renderStars(item.id)}
         </div>
       ))}
 
@@ -79,18 +118,17 @@ export default function ReflectionPage() {
         習慣
       </div>
 
-      {/* 習慣 各項目 + 星 */}
-      {reflectionItems.habits.map((item, i) => (
-        <div key={i + 3} className="mb-2">
+      {reflectionItems.habits.map((item) => (
+        <div key={item.id} className="mb-2">
           <div className="flex items-center gap-3">
             <Image src={item.icon} alt={item.label} width={40} height={40} />
             <span className="text-sm">{item.label}</span>
           </div>
-          {renderStars(i + 3)}
+          {renderStars(item.id)}
         </div>
       ))}
 
-      {/* 今日を振り返って一言 */}
+      {/* 一言入力 */}
       <div className="bg-[#73D8E9] text-white text-center py-2 rounded mb-2 text-sm font-semibold mt-6">
         今日を振り返って一言
       </div>
@@ -104,7 +142,11 @@ export default function ReflectionPage() {
       />
 
       <div className="mt-6 flex justify-center">
-        <button className="bg-[#198593] text-white px-6 py-2 rounded-lg text-sm shadow">
+        <button
+          className="bg-[#198593] text-white px-6 py-2 rounded-lg text-sm shadow"
+          onClick={handleSubmit}
+          disabled={submitting}
+        >
           記録をつける
         </button>
       </div>
