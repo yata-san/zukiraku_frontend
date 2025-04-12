@@ -50,7 +50,7 @@ export default function QuestionsPage() {
       */
 
       // 暫定的に result ページへ遷移
-      router.push("/result");
+      router.push("/results");
     }
   };
 
