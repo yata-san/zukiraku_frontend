@@ -24,7 +24,7 @@ export default function StoryNavigation({ showBack = true, backHref = "", nextHr
         onClick={() => router.push(nextHref)}
         className="bg-white text-[#198593] text-sm px-6 py-2 rounded-full font-semibold shadow"
       >
-       {nextLabel}
+        {nextLabel}
       </button>
     </div>
   );
