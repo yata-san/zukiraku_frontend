@@ -67,7 +67,7 @@ export default function ChatResultPage() {
       {/* OK! ボタン */}
       <div className="flex justify-center mb-3">
         <button
-          onClick={() => router.push("/next")} // 次に進むページに変更可
+          onClick={() => router.push("/datalist")} // 次に進むページに変更可
           className="bg-[#198593] text-white px-6 py-2 rounded-lg text-sm shadow"
         >
           OK！

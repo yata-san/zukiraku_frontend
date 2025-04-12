@@ -12,6 +12,7 @@ export default function ClientLayout({ children }) {
     !pathname.startsWith("/summary") &&
     !pathname.startsWith("/datalist") &&
     !pathname.startsWith("/reflection") &&
+    !pathname.startsWith("/mentoring") &&
     !pathname.startsWith("/result-check");
 
   return (
