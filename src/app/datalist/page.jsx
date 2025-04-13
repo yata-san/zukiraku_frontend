@@ -9,8 +9,6 @@ export default function DatalistPage() {
   const [loading, setLoading] = useState(true);
 
   // ✅ API接続先を .env から取得して切り替えられるようにしました
-  //    - 開発時: http://localhost:8000
-  //    - 本番時: https://app-002-step3-2-py-oshima1.azurewebsites.net
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
@@ -41,7 +39,6 @@ export default function DatalistPage() {
 
     fetchReflections();
   }, []);
-}
 
   // ★ 星生成
   const renderStars = (score) => (
