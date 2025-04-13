@@ -2,28 +2,44 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import fetchReflections from "./fetchReflections";
 
 export default function DatalistPage() {
   const router = useRouter();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // APIから取得
   useEffect(() => {
-    const fetchAndSetReflections = async () => {
+    const fetchReflections = async () => {
       try {
-        const data = await fetchReflections();
-        setRecords(data);
+        const res = await fetch("http://localhost:8000/api/review_sessions/1");
+        const data = await res.json();
+        console.log("API response:", data);
+    
+        const sessions = Array.isArray(data) ? data : data.review_sessions;
+    
+        const transformed = sessions.map((session) => ({
+          date: new Date(session.execution_date).toISOString().split("T")[0],
+          ratings: {
+            goals: session.to_be_scores.map((s) => ({ to_be_id: s.to_be_id, score: s.score })),
+            habits: session.to_do_scores.map((s) => ({ to_do_id: s.to_do_id, score: s.score })),
+          },
+          comment: session.feedback_text,
+        }));
+    
+        setRecords(transformed);
       } catch (error) {
         console.error("Failed to fetch reflections:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchAndSetReflections();
+
+
+    fetchReflections();
   }, []);
 
-  // ★生成ヘルパー
+  // ★ 星生成
   const renderStars = (score) => (
     [...Array(5)].map((_, i) => (
       <span key={i} className={`text-sm ${i < score ? "text-[#F5E755]" : "text-[#DFDFDF]"}`}>
@@ -34,7 +50,6 @@ export default function DatalistPage() {
 
   return (
     <div className="max-w-[420px] mx-auto px-4 py-6 bg-white min-h-screen">
-      {/* 振り返り追加ボタン */}
       <div className="flex justify-center mb-6">
         <button
           onClick={() => router.push("/reflection")}
@@ -57,10 +72,8 @@ export default function DatalistPage() {
                 key={index}
                 className="border border-gray-200 rounded-xl p-4 shadow-sm bg-white"
               >
-                {/* ① 日付 */}
                 <div className="text-xs text-gray-500 mb-2">{item.date}</div>
 
-                {/* ② なりたい姿評価 */}
                 <div className="text-sm font-semibold text-[#198593] mb-1">なりたい姿</div>
                 <div className="flex gap-1 mb-2 flex-wrap">
                   {item.ratings.goals.map((goal, i) => (
@@ -68,7 +81,6 @@ export default function DatalistPage() {
                   ))}
                 </div>
 
-                {/* ③ 習慣評価 */}
                 <div className="text-sm font-semibold text-[#198593] mb-1">習慣</div>
                 <div className="flex gap-1 mb-2 flex-wrap">
                   {item.ratings.habits.map((habit, i) => (
@@ -76,7 +88,6 @@ export default function DatalistPage() {
                   ))}
                 </div>
 
-                {/* ④ 自由記述（2行） */}
                 <div className="text-sm text-gray-700 overflow-hidden text-ellipsis line-clamp-2">
                   {item.comment}
                 </div>

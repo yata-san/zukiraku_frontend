@@ -45,36 +45,38 @@ export default function ReflectionPage() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-
+  
     const payload = {
-      user_id: USER_ID,
-      ratings: {
-        goals: reflectionItems.goals.map((item) => ({
-          id: item.id,
-          score: ratings[item.id] || 0
+      user_id: 1, // 固定値でOK
+      to_be_scores: reflectionItems.goals
+        .filter((item) => item.id !== undefined && item.id !== null)
+        .map((item) => ({
+          to_be_id: parseInt(item.id.replace("goal", "")),  // ✅ intに変換
+          to_be_score: ratings[item.id] ?? 0                // ✅ キー変更
         })),
-        habits: reflectionItems.habits.map((item) => ({
-          id: item.id,
-          score: ratings[item.id] || 0
-        }))
-      },
-      comment,
-      date: new Date().toISOString().split("T")[0]
+      to_do_scores: reflectionItems.habits
+        .filter((item) => item.id !== undefined && item.id !== null)
+        .map((item) => ({
+          to_do_id: parseInt(item.id.replace("habit", "")), // ✅ intに変換
+          to_do_score: ratings[item.id] ?? 0                // ✅ キー変更
+        })),
+      feedback_text: comment,
+      execution_date: new Date().toISOString().split("T")[0]
     };
-
+  
     try {
-      const res = await fetch("http://localhost:8000/api/reflection", { //【連携時入力】APIのURL確定したら入力
+      const res = await fetch("http://localhost:8000/api/submit_review", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
       });
-
+  
       if (res.ok) {
-        alert("記録を送信しました！");
-        setRatings({});
-        setComment("");
+        const data = await res.json();
+        localStorage.setItem("session_id", data.session_id); // ← mentoring用
+        window.location.href = "/mentoring";
       } else {
         alert("送信に失敗しました");
       }
