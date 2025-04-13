@@ -76,6 +76,7 @@ export default function ReflectionPage() {
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("session_id", data.session_id); // ← mentoring用
+        localStorage.setItem("ai_feedback", data.ai_feedback);
         window.location.href = "/mentoring";
       } else {
         alert("送信に失敗しました");
