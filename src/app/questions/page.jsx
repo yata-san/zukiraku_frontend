@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { questions } from "./questionsData";
 import { v4 as uuidv4 } from "uuid";
@@ -8,8 +8,16 @@ import { v4 as uuidv4 } from "uuid";
 export default function QuestionsPage() {
   const router = useRouter();
   const [answers, setAnswers] = useState([]);
-  const answer_id = uuidv4();
+  const [screeningResultId, setScreeningResultId] = useState("");
 
+  // UUID生成して localStorage に保存
+  useEffect(() => {
+    const newId = uuidv4();
+    setScreeningResultId(newId);
+    localStorage.setItem("screening_result_id", newId);
+  }, []);
+
+  // 選択肢の選択処理
   const handleSelect = (questionIndex, choice_id, question_id) => {
     const newAnswers = [...answers];
     newAnswers[questionIndex] = { question_id, choice_id };
@@ -19,38 +27,33 @@ export default function QuestionsPage() {
   const allAnswered = answers.length === questions.length && answers.every((a) => a);
 
   const handleSubmit = async () => {
-    if (allAnswered) {
-      const payload = {
-        answer_id: answer_id,
-        screening_type_id: 1, // 今は仮固定（将来は切り替え可能）
-        answers: answers,
-      };
+    if (!allAnswered) return;
 
-      console.log("送信データ:", payload);
+    const payload = {
+      screening_result_id: screeningResultId,
+      answers: answers
+    };
 
-      // 🔽 FastAPI に送信（現在はコメントアウト）
-      /*
-      try {
-        const res = await fetch("http://localhost:8000/api/answers", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
+    try {
+      const res = await fetch("http://localhost:8000/api/answers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
 
-        if (res.ok) {
-          router.push("/result");
-        } else {
-          alert("送信に失敗しました");
-        }
-      } catch (err) {
-        console.error("通信エラー:", err);
+      if (res.ok) {
+        const data = await res.json();
+        // screening_type_id を保存し、/results に遷移
+        localStorage.setItem("screening_type_id", data.screening_type_id);
+        localStorage.setItem("screening_result_id", data.screening_result_id);
+        router.push("/results");
+      } else {
+        alert("送信に失敗しました");
       }
-      */
-
-      // 暫定的に result ページへ遷移
-      router.push("/results");
+    } catch (err) {
+      console.error("通信エラー:", err);
     }
   };
 
