@@ -36,7 +36,12 @@ jobs:
       - name: Copy artifact for deployment job
         run: |
           mkdir deploy
+          # standalone出力物のコピー
           cp -r ./.next/standalone/. ./deploy
+          # publicディレクトリ（画像など）をstandaloneに含める
+          cp -r ./public ./deploy/public
+          # .next/staticのファイルを含める（最適化画像やJS/CSS）
+          mkdir -p ./deploy/.next/static
           cp -r ./.next/static/. ./deploy/.next/static
 
       - name: Zip artifact for deployment
