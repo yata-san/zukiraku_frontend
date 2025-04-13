@@ -34,8 +34,11 @@ export default function QuestionsPage() {
       answers: answers
     };
 
+    // 接続先をlocalhost:8000とAzureで自動切換え（.env対応済み）
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     try {
-      const res = await fetch("http://localhost:8000/api/answers", {
+      const res = await fetch(`${API_BASE_URL}/api/answers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

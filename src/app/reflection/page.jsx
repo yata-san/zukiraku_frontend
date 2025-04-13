@@ -3,6 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 
+// ✅ API接続先を環境変数から取得するように変更しました！
+//    - 開発環境（npm run dev）では .env.local の URL（例: http://localhost:8000）
+//    - 本番環境（VercelやAzure）では .env.production の URL（例: https://app-002-step3-2-py-oshima1.azurewebsites.net）
+//    に自動で切り替わります
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const USER_ID = "user_1234"; // 【連携時要入力】ログイン情報と連携
 
 const reflectionItems = {
@@ -45,34 +51,34 @@ export default function ReflectionPage() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-  
+
     const payload = {
       user_id: 1, // 固定値でOK
       to_be_scores: reflectionItems.goals
-        .filter((item) => item.id !== undefined && item.id !== null)
+        .filter((item) => item.id)
         .map((item) => ({
-          to_be_id: parseInt(item.id.replace("goal", "")),  // ✅ intに変換
-          to_be_score: ratings[item.id] ?? 0                // ✅ キー変更
+          to_be_id: parseInt(item.id.replace("goal", "")),
+          to_be_score: ratings[item.id] ?? 0
         })),
       to_do_scores: reflectionItems.habits
-        .filter((item) => item.id !== undefined && item.id !== null)
+        .filter((item) => item.id)
         .map((item) => ({
-          to_do_id: parseInt(item.id.replace("habit", "")), // ✅ intに変換
-          to_do_score: ratings[item.id] ?? 0                // ✅ キー変更
+          to_do_id: parseInt(item.id.replace("habit", "")),
+          to_do_score: ratings[item.id] ?? 0
         })),
       feedback_text: comment,
       execution_date: new Date().toISOString().split("T")[0]
     };
-  
+
     try {
-      const res = await fetch("http://localhost:8000/api/submit_review", {
+      const res = await fetch(`${API_BASE_URL}/api/submit_review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
       });
-  
+
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("session_id", data.session_id); // ← mentoring用

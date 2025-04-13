@@ -8,16 +8,20 @@ export default function DatalistPage() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // APIから取得
+  // ✅ API接続先を .env から取得して切り替えられるようにしました
+  //    - 開発時: http://localhost:8000
+  //    - 本番時: https://app-002-step3-2-py-oshima1.azurewebsites.net
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     const fetchReflections = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/review_sessions/1");
+        const res = await fetch(`${API_BASE_URL}/api/review_sessions/1`);
         const data = await res.json();
         console.log("API response:", data);
-    
+
         const sessions = Array.isArray(data) ? data : data.review_sessions;
-    
+
         const transformed = sessions.map((session) => ({
           date: new Date(session.execution_date).toISOString().split("T")[0],
           ratings: {
@@ -26,7 +30,7 @@ export default function DatalistPage() {
           },
           comment: session.feedback_text,
         }));
-    
+
         setRecords(transformed);
       } catch (error) {
         console.error("Failed to fetch reflections:", error);
@@ -35,9 +39,9 @@ export default function DatalistPage() {
       }
     };
 
-
     fetchReflections();
   }, []);
+}
 
   // ★ 星生成
   const renderStars = (score) => (

@@ -1,6 +1,16 @@
 // fetchReflections.js
+// ✅ APIの接続先を環境変数で切り替えできるようにしました
+//    .env.local（開発用）と .env.production（本番用）を切り替えることで、
+//    ローカル or Azure への接続が自動で変わります
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default async function fetchReflections() {
-  const res = await fetch("http://localhost:8000/get_review_history/1"); // 仮にuser_id=1
+  // 仮に user_id=1 の履歴データを取得
+  const res = await fetch(`${API_BASE_URL}/get_review_history/1`);
+  const data = await res.json();
+  return data;
+}
+  
   const data = await res.json();
 
   // data自体が配列であることを想定
