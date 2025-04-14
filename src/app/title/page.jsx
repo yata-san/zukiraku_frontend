@@ -21,14 +21,13 @@ export default function TitlePage() {
       </div>
 
       {/* 下部画像＆はじめるボタン */}
-      <div className="relative w-full mt-8">
+      <div className="relative w-screen h-screen">
         <Image
           src="/title/cover.jpg"
           alt="メイン画像"
-          width={420}
-          height={300}
-          className="w-full object-cover"
-        />        
+          fill
+          className="object-cover object-center"
+        />       
 
         {/* 重ねたボタン */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
