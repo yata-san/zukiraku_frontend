@@ -23,7 +23,7 @@ export default function TitlePage() {
       {/* 下部画像＆はじめるボタン */}
       <div className="relative w-full mt-8">
         <Image
-          src="/title/cover.png"
+          src="/title/cover.jpg"
           alt="メイン画像"
           width={420}
           height={300}
