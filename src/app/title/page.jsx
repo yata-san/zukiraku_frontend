@@ -27,7 +27,7 @@ export default function TitlePage() {
           alt="メイン画像"
           width={420}
           height={300}
-          className="h-screen w-full object-cover"
+          className="h-screen object-cover"
         />
 
         {/* 重ねたボタン */}
