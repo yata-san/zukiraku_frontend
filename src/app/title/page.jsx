@@ -21,13 +21,13 @@ export default function TitlePage() {
       </div>
 
       {/* 下部画像＆はじめるボタン */}
-      <div className="relative w-full mt-8">
+        // 画面全体を埋めるコンテナ
+      <div className="relative w-screen h-screen">
         <Image
           src="/title/cover.jpg"
           alt="メイン画像"
-          width={420}
-          height={300}
-          className="w-full object-cover"
+          fill                    // ← Next.js 13+ ならこれ
+          className="object-cover object-center"
         />
 
         {/* 重ねたボタン */}
