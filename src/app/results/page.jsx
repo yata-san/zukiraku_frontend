@@ -4,44 +4,44 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 // 仮の診断結果（本来はAPIから取得）
-const mockResultIds = ["type_001", "type_002", "type_006", "type_007"];
+const mockResultIds = ["type_001", "type_002"];
 
 // タイプ情報（slugは説明ページのリンクに使用）
 const headacheTypes = {
   type_001: {
     name: "ズキズキタイプ（片頭痛の傾向があります）",
     description: "頭の片側にズキズキとした痛みが出ることが多い\n光や音、においに敏感になることがある\n吐き気や気分の悪さを伴うことがある",
-    slug: "ズキズキタイプ片頭痛の傾向があります"
+    slug: "zukizuki"
   },
   type_002: {
     name: "ギュータイプ（緊張型頭痛の傾向があります）",
     description: "頭全体がギューっと締めつけられるように痛む\n肩や首のこりを伴うことがある\n体を動かしても悪化しないことが多い",
-    slug: "ギュータイプ緊張型頭痛の傾向があります"
+    slug: "gyu"
   },
   type_003: {
     name: "ズドンタイプ（群発頭痛の傾向があります）",
     description: "目の奥がえぐられるように強く痛む\n涙や鼻水が一緒に出ることがある\n毎日同じ時間帯に起こりやすい発作が数週間続く",
-    slug: "ズドンタイプ群発頭痛の傾向があります"
+    slug: "zudon"
   },
   type_004: {
     name: "注意タイプ（薬物乱用頭痛の可能性があります）",
     description: "薬を飲む回数が多い（月に10日以上）\n薬が効きにくくなってきたと感じる\n薬を飲まないと不安になる",
-    slug: "注意タイプ薬物乱用頭痛の可能性があります"
+    slug: "chu-i"
   },
   type_005: {
     name: "医療機関への受診をおすすめします",
     description: "突然始まった激しい頭痛\n言葉が出にくい、手足のしびれ\n発熱やうなじのこわばりを伴う",
-    slug: "医療機関への受診をおすすめします"
+    slug: "2zisei"
   },
   type_006: {
     name: "不定型タイプ（特定のパターンに該当しません）",
     description: "いくつかの頭痛パターンに当てはまる要素はありますが、明確なタイプには分類されません。\n自分に合った生活改善や受診を検討しましょう。",
-    slug: "不定型タイプ特定のパターンに該当しません"
+    slug: "mibunrui"
   },
   type_007: {
     name: "非該当タイプ（頭痛の可能性は低そうです）",
     description: "現在の状態では明確な頭痛のタイプは見られません。\n今後の変化に注意しながら、予防や生活習慣の見直しをおすすめします。",
-    slug: "非該当タイプ頭痛の可能性は低そうです"
+    slug: "none"
   }
 };
 
@@ -71,7 +71,7 @@ export default function ResultPage() {
               <p className="text-sm mb-3 whitespace-pre-line">{result.description}</p>
               <button
                 onClick={() =>
-                  router.push(`/headache-description/${encodeURIComponent(result.slug)}`)
+                  router.push(`/headache_type/${encodeURIComponent(result.slug)}`)
                 }
                 className="text-sm bg-[#198593] text-white px-4 py-2 rounded-full shadow"
               >
