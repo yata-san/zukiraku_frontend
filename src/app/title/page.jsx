@@ -7,7 +7,7 @@ export default function TitlePage() {
   const router = useRouter();
 
   return (
-    <div className="h-screen bg-[#93DBE7] text-center text-white relative flex flex-col justify-between max-w-[420px] mx-auto">
+    <div className="min-h-screen bg-[#93DBE7] text-center text-white relative flex flex-col justify-between max-w-[420px] mx-auto">
 
       {/* 上部タイトル・コンセプト */}
       <div className="pt-12 px-6">
