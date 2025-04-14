@@ -25,9 +25,8 @@ export default function TitlePage() {
         <Image
           src="/title/cover.jpg" 
           alt="メイン画像"
-          width={420}
-          height={1000}
-          className="w-full object-cover"
+          fill
+          className="w-full"
         />
         {/* 重ねたボタン */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
