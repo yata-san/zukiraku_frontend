@@ -7,31 +7,32 @@ export default function TitlePage() {
   const router = useRouter();
 
   return (
-    <div className="relative w-full h-screen text-white">
-      {/* 背景画像 */}
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* 背景画像（cover.jpgを全画面に） */}
       <Image
-        src="/title/cover.jpg" // ← 必ず存在するファイルに
-        alt="背景画像"
-        fill
-        className="object-cover z-0"
+        src="/title/cover.jpg"
+        alt="Cover"
+        layout="fill"
+        objectFit="cover"
         priority
       />
 
-      {/* 中央に重ねる中身 */}
-      <div className="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
-        {/* 上部タイトル・キャッチコピー */}
-        <p className="text-xs mb-2 tracking-wide">あなたの頭痛と本気で向き合うアプリよ</p>
-        <h1 className="text-4xl font-bold tracking-wider mb-6">ズキラク</h1>
-
-        {/* 中央のメッセージ */}
-        <p className="text-lg font-medium mb-8 whitespace-pre-line leading-relaxed">
+      {/* 上部テキスト（上1/3に配置） */}
+      <div className="absolute top-[10%] left-0 w-full flex flex-col items-center text-white text-center px-6 z-10">
+        <div className="mb-4">
+          <p className="text-xs mb-1 tracking-wide">あなたの頭痛と本気で向き合うアプリ</p>
+          <h1 className="text-4xl font-bold tracking-wider">ズキラク</h1>
+        </div>
+        <div className="text-lg font-medium whitespace-pre-line leading-relaxed">
           頭痛を気にする生活から<br />解放されませんか？
-        </p>
+        </div>
+      </div>
 
-        {/* ボタン */}
+      {/* はじめるボタン（画面下部に固定） */}
+      <div className="absolute bottom-10 w-full flex justify-center z-10">
         <button
-          onClick={() => router.push("/cautionary")}
-          className="bg-white text-[#198593] font-semibold px-6 py-2 rounded-full shadow-md text-sm"
+          onClick={() => router.push("/story/s1")}
+          className="bg-white text-[#198593] font-bold py-2 px-8 rounded-full shadow-md text-lg"
         >
           はじめる
         </button>
