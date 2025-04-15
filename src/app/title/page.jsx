@@ -18,23 +18,13 @@ export default function TitlePage() {
         頭痛を気にする生活から<br />解放されませんか？
       </div>
 
-      {/* 画像＋ボタン */}
-      <div className="w-full h-[50vh] mt-8">
+      {/* 画像＋ボタン（img使用版） */}
+      <div className="relative w-full h-[50vh] mt-8">
         <img
           src="/title/cover.jpg"
           alt="メイン画像"
           className="w-full h-full object-cover"
         />
-      </div>
-
-      {/* <div className="relative w-full h-[50vh] mt-8">
-        <Image
-          src="/title/cover.jpg"
-          alt="メイン画像"
-          fill
-          className="object-cover"
-          priority
-        /> */}
 
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
           <button
@@ -48,3 +38,4 @@ export default function TitlePage() {
     </div>
   );
 }
+
