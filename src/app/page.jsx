@@ -11,7 +11,7 @@ export default function TitlePage() {
 
       {/* 上部タイトル・コンセプト */}
       <div className="pt-12 px-6">
-        <p className="text-xs mb-1 tracking-wide">あなたの頭痛と本気で向き合うアプリ</p>
+        <p className="text-xs mb-1 tracking-wide">あなたの頭痛と本気で向き合うアプリよ</p>
         <h1 className="text-4xl font-bold tracking-wider">ズキラク</h1>
       </div>
 
@@ -23,14 +23,14 @@ export default function TitlePage() {
       {/* 下部画像＆はじめるボタン */}
       <div className="relative w-full mt-8">
         <Image
-          src="/title/cover.png" // ← 必要に応じて差し替えてください
+          src="/title/cover.jpg" // ← 正しいファイル名に変更
           alt="メイン画像"
           width={420}
           height={300}
           className="w-full object-cover"
+          priority
         />
 
-        {/* 重ねたボタン */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <button
             onClick={() => router.push("/cautionary")}
@@ -43,3 +43,4 @@ export default function TitlePage() {
     </div>
   );
 }
+
