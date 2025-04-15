@@ -26,38 +26,44 @@ export default function QuestionsPage() {
 
   const allAnswered = answers.length === questions.length && answers.every((a) => a);
 
+  
   const handleSubmit = async () => {
     if (!allAnswered) return;
 
     const payload = {
-      screening_result_id: screeningResultId,
+      session_id: screeningResultId,
       answers: answers
     };
 
     // 接続先をlocalhost:8000とAzureで自動切換え（.env対応済み）
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/answers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
+    console.log("送信開始", payload);
 
-      if (res.ok) {
-        const data = await res.json();
-        // screening_type_id を保存し、/results に遷移
-        localStorage.setItem("screening_type_id", data.screening_type_id);
-        localStorage.setItem("screening_result_id", data.screening_result_id);
-        router.push("/results");
-      } else {
-        alert("送信に失敗しました");
-      }
+    try {
+  //     const res = await fetch(`${API_BASE_URL}/api/answers`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify(payload)
+  //     });
+
+  //     console.log("APIからのレスポンス", res.status);
+  //     const data = await res.json();
+  //     console.log("APIの返却データ", data);
+
+  //     if (res.ok) {
+  //       localStorage.setItem("screening_type_id", data.screening_type_id);
+  //       localStorage.setItem("screening_result_id", data.screening_result_id);
+      router.push("/results");
+  //    } else {
+  //      alert("送信に失敗しました");
+  //    }
     } catch (err) {
       console.error("通信エラー:", err);
     }
+
   };
 
   return (

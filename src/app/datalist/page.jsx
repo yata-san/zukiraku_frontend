@@ -76,16 +76,28 @@ export default function DatalistPage() {
                 <div className="text-xs text-gray-500 mb-2">{item.date}</div>
 
                 <div className="text-sm font-semibold text-[#198593] mb-1">なりたい姿</div>
-                <div className="flex gap-1 mb-2 flex-wrap">
+                <div className="space-y-2 mb-2">
                   {item.ratings.goals.map((goal, i) => (
-                    <div key={i}>{renderStars(goal.score)}</div>
+                    <div key={i} className="flex items-center gap-2">
+                      <img src={`/icons/goal${i + 1}.png`} alt={`goal${i + 1}`} className="w-5 h-5" />
+                      <span className="text-sm text-gray-700 w-[160px]">
+                        {["朝すっきり起きられる", "集中できる", "心の余裕をもって過ごす"][i]}
+                      </span>
+                      <div>{renderStars(goal.score)}</div>
+                    </div>
                   ))}
                 </div>
 
                 <div className="text-sm font-semibold text-[#198593] mb-1">習慣</div>
-                <div className="flex gap-1 mb-2 flex-wrap">
+                <div className="space-y-2 mb-2">
                   {item.ratings.habits.map((habit, i) => (
-                    <div key={i}>{renderStars(habit.score)}</div>
+                    <div key={i} className="flex items-center gap-2">
+                      <img src={`/icons/habit${i + 1}.png`} alt={`habit${i + 1}`} className="w-5 h-5" />
+                      <span className="text-sm text-gray-700 w-[160px]">
+                        {["夜更かしをやめる", "瞑想を5分する", "水をたくさん飲む"][i]}
+                      </span>
+                      <div>{renderStars(habit.score)}</div>
+                    </div>
                   ))}
                 </div>
 
